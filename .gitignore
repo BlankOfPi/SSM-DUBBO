@@ -5,3 +5,5 @@ default-compile
 default-testCompile
 target
 surefire-reports
+*.project
+*.classpath
