@@ -1,0 +1,20 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
+</head>
+<body>
+	<script type="text/javascript">
+		$(function() {
+			$("#button1").click(function(){
+				$.post("../user/selectAll.action","",function(){})
+			});
+	        
+	    });
+		
+	</script>
+	<button id="button1">点击请求后台</button>
+</body>
+</html>

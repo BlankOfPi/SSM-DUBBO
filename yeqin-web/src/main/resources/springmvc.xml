@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://code.alibabatech.com/schema/dubbo  
+    http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+	http://www.springframework.org/schema/mvc
+	http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+	
+	<!-- 配置SpringMVC -->
+	<!-- 1.开启SpringMVC注解模式 -->
+	<!-- 简化配置： (1)自动注册DefaultAnootationHandlerMapping,AnotationMethodHandlerAdapter 
+		(2)提供一些列：数据绑定，数字和日期的format @NumberFormat, @DateTimeFormat, xml,json默认读写支持 -->
+
+	<mvc:annotation-driven/>
+
+	<!-- 2.静态资源默认servlet配置 (1)加入对静态资源的处理：js,gif,png (2)允许使用"/"做整体映射 -->
+	<mvc:default-servlet-handler />
+
+	<!-- 3.配置jsp 显示ViewResolver -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+	<!-- 4.扫描web相关的bean -->
+	<context:component-scan base-package="com.tbag.controller" />
+
+
+	<!-- 自定义拦截器 -->
+	<!-- <mvc:interceptors> <mvc:interceptor> <mvc:mapping path="/**"/> <bean 
+		class="cn.tdog.interceptor.HandInterceptor1"> <property name="allowUrls"> 
+		<list> 如果请求中包含以下路径，则不进行拦截 <value>/getUserName</value> <value>/resources</value> 
+		<value>/goRegist</value> <value>/register</value> <value>/login</value> <value>/checkNum</value> 
+		<value>/images</value> <value>/js</value> <value>/lib</value> <value>/stylesheets</value> 
+		</list> </property> <property name="adminUrls"> <list> 如果请求中包含以下路径，则进行权限认证 
+		<value>/goUserPage</value> </list> </property> </bean> </mvc:interceptor> 
+		</mvc:interceptors> -->
+
+	<!-- 上传文件 -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize">
+			<value>5242880</value>
+		</property>
+	</bean>
+
+	<!-- 以下 validator ConversionService 在使用 mvc:annotation-driven 会 自动注册 -->
+	<!-- <bean id="validator"
+		class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+		<property name="providerClass" value="org.hibernate.validator.HibernateValidator" />
+		如果不加默认到 使用classpath下的 ValidationMessages.properties
+		<property name="validationMessageSource" ref="messageSource" />
+	</bean> -->
+
+	<!-- 国际化的消息资源文件 -->
+	<!-- <bean id="messageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				在web环境中一定要定位到classpath 否则默认到当前web应用下找
+				<value>classpath:MytableMessages</value>
+			</list>
+		</property>
+		<property name="useCodeAsDefaultMessage" value="false" />
+		<property name="defaultEncoding" value="UTF-8" />
+		<property name="cacheSeconds" value="60" />
+	</bean> -->
+	<dubbo:application name="yeqin-web"/>
+	<!--使用zookeeper注册中心暴露服务地址 -->
+	<dubbo:registry address="zookeeper://127.0.0.1:2181"></dubbo:registry>
+	<!--要暴露的服务接口 -->
+	<!-- <dubbo:service interface="com.ITest" ref="springservice"/> <bean id="springservice" 
+		class="com.Test"> </bean> -->
+	<dubbo:annotation package="com.tbag.controller"></dubbo:annotation>
+</beans>

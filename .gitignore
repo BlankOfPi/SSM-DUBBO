@@ -1,0 +1,7 @@
+.settings
+classes
+maven-archiver
+default-compile
+default-testCompile
+target
+surefire-reports
